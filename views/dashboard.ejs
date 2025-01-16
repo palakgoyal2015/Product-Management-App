@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    
+    <!-- Internal CSS -->
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, ul, li, form {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Basic styling for the body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            font-size: 18px;
+            position: fixed;  /* Fixed to the top */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;  /* Ensures navbar is always on top */
+            width: 100%;   /* Ensures the navbar spans across the full width */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .welcome-text {
+            margin-left: 20px; /* Adjusted to have space after profile picture */
+        }
+
+        #logout-button {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 16px;
+            padding-right: 40px;
+        }
+
+        #logout-button:hover {
+            color: #27ae60;
+        }
+
+        /* Profile Image Styling (Navbar) */
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;  /* Circular shape */
+            object-fit: cover;  /* Ensures the image fits the container properly */
+            border: 2px solid #ecf0f1;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 230px; /* Default sidebar width */
+            background-color: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            position: fixed; /* Fixed position */
+            top: 40px; /* Start below navbar */
+            left: 0;
+            bottom: 0; /* Stretch sidebar to the bottom */
+            z-index: 50; /* Ensures sidebar is above main content */
+            overflow-y: auto; /* Allow scrolling inside sidebar if content overflows */
+            transition: width 0.3s ease; /* Smooth transition for resizing */
+        }
+
+        /* Adjust sidebar width on small screens */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;  /* Reduced width for mobile */
+            }
+
+            .main {
+                margin-left: 200px;  /* Adjust the main content margin */
+            }
+        }
+
+        /* Sidebar header and links */
+        .sidebar h1 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        /* Main content styling */
+        .main {
+            margin-left: 250px; /* Sidebar width */
+            margin-top: 60px;  /* Offset content below the navbar */
+            padding: 20px;
+            background-color: #fff;
+            flex: 1;
+            overflow-y: auto;  /* Allow scrolling in the main content area */
+            height: calc(100vh - 50px); /* Full height minus navbar */
+            position: relative;
+            transition: margin-left 0.3s ease; /* Smooth transition for adjusting layout */
+        }
+
+        .main h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        /* Section styling */
+        .section {
+            display: none;
+            transition: all 0.3s ease-in-out;
+            padding: 20px;
+        }
+
+        /* Active section styling */
+        .section.active {
+            display: block;
+        }
+
+        /* Fixed Add Product Section */
+        #add-product {
+            position: fixed;  /* Fix the position of the Add Product section */
+            top: 60px;  /* Below the navbar */
+            left: 270px;  /* Offset from the left (considering the sidebar width) */
+            width: calc(100% - 250px);  /* Make the Add Product section take full width minus the sidebar */
+            background-color: #fff;
+            padding: 20px;
+            z-index: 10;  /* Keep it above the main content */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styling */
+        form {
+            margin-top: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #2ecc71;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60; /* Green color for success message */
+            display: none; /* Initially hidden */
+            padding: 10px;
+            background-color: #ecf0f1; /* Light background color for contrast */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for visibility */
+            text-align: center;
+        }
+
+        /* Profile Section Styling */
+        #profile {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #profile h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50; /* Dark blue for headings */
+        }
+
+        #profile p {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #555; /* Lighter grey for paragraph text */
+        }
+
+        #profile p strong {
+            font-weight: bold;
+            color: #333; /* Darker color for labels */
+        }
+
+        #profile .profile-info {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #777; /* Light grey for subtext */
+            padding: 10px;
+            border-left: 5px solid #27ae60; /* Green line to the left */
+            background-color: #ecf0f1; /* Very light grey background */
+            border-radius: 5px;
+        }
+
+        #profile .profile-info span {
+            font-weight: bold;
+        }
+
+        /* View Products Section Styling */
+#view-product {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#view-product h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2c3e50; /* Dark blue for headings */
+}
+
+#product-list {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Spacing between product cards */
+}
+
+#product-list li {
+    width: calc(33.333% - 20px); /* Three products per row */
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+#product-list li:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.product-card {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-image {
+    max-width: 100%; /* Ensures the image fits within its container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 150px; /* Limiting the image size */
+    border-radius: 8px;
+    cursor: pointer; /* Makes the image clickable */
+    margin-bottom: 10px; /* Spacing below the image */
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect to enlarge image */
+.product-image:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Product info styling */
+.product-info {
+    padding: 10px;
+    text-align: left;
+    color: #2c3e50;
+}
+
+.product-info h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #2c3e50; /* Dark color for the product name */
+}
+
+.product-info p {
+    font-size: 14px;
+    color: #7f8c8d; /* Light grey color for product description */
+    line-height: 1.5;
+}
+
+.product-description {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin: 10px 0;
+    text-align: justify; /* Justify the text to make it more structured */
+}
+
+.product-description span {
+    font-weight: bold; /* Emphasize specific parts of the description */
+}
+
+.product-info .badges {
+    margin-top: 15px;
+}
+
+.product-info .badge {
+    display: inline-block;
+    background-color: #27ae60;
+    color: #fff;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+/* Badges for organic, cruelty-free, etc. */
+.badge-organic {
+    background-color: #2ecc71;
+}
+
+.badge-cruelty-free {
+    background-color: #e74c3c;
+}
+
+.badge-vegan {
+    background-color: #3498db;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <!-- Profile Image placed before the welcome text -->
+            <img id="profile-picture" class="profile-img" src="default-profile.jpg" alt="Profile Picture" />
+            <span class="welcome-text">Welcome to Software Products, <%= username %></span>
+            <a href="/logout" id="logout-button">Logout</a>
+        </nav>
+
+        <div class="dashboard-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h1>Dashboard</h1>
+                <ul>
+                    <li><a href="#" onclick="showSection('add-product')">Add Product</a></li>
+                    <li><a href="#" onclick="showSection('view-product')">View Products</a></li>
+                    <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main">
+                <!-- Add Product Section -->
+                <div id="add-product" class="section active">
+                    <h2>Add Product</h2>
+                    <form id="add-product-form" enctype="multipart/form-data">
+                        <label for="product-name">Product Name:</label>
+                        <input type="text" id="product-name" name="product-name" required>
+                        <br>
+                        <label for="product-description">Description:</label>
+                        <textarea id="product-description" name="product-description" required></textarea>
+                        <br>
+                        <label for="product-image">Upload Image:</label>
+                        <input type="file" id="product-image" name="product-image" required>
+                        <br>
+                        <button type="submit">Add Product</button>
+                    </form>
+                    <div id="message"></div>
+                </div>
+
+                <!-- View Products Section -->
+                <div id="view-product" class="section">
+                    <h2>View Products</h2>
+                    <ul id="product-list">
+                        <% products.forEach(product => { %>
+                            <li>
+                                <div class="product-card">
+                                    <h3><%= product.name %></h3>
+                                    <p><%= product.description %></p>
+                                    <% if (product.image) { %>
+                                        <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image" onclick="toggleImageSize(this)">
+                                    <% } %>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile" class="section">
+                    <h2>Profile</h2>
+                    <form id="profile-form">
+                        <label for="profile-picture-input">Upload Profile Picture:</label>
+                        <input type="file" id="profile-picture-input" name="profile-picture-input" accept="image/*">
+                        <br><br>
+                        <p><strong>Username:</strong> <%= username %></p>
+                        <p><strong>Role:</strong> <%= role %></p>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the appropriate section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Profile picture upload functionality
+        document.getElementById('profile-picture-input').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const imgElement = document.getElementById('profile-picture');
+                    imgElement.src = reader.result; // Update the profile picture
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle product form submission and display success message
+        document.getElementById('add-product-form').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent form submission
+
+    const formData = new FormData(this);
+    try {
+        const response = await fetch('/add-product', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        const messageDiv = document.getElementById('message');
+        
+        if (result.success) {
+            messageDiv.textContent = result.message;  // Use the message returned from the backend
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#ecf0f1';  // Success background
+            messageDiv.style.color = '#27ae60';  // Success text color
+        } else {
+            messageDiv.textContent = result.message || 'Failed to add product. Please try again.'; // If no specific message is returned
+            messageDiv.style.display = 'block';
+            messageDiv.style.backgroundColor = '#f2dede';  // Error background
+            messageDiv.style.color = '#a94442';  // Error text color
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+
+        // Fetch and display products with image toggle functionality
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/view-products');
+                const products = await response.json();
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = '';
+
+                products.forEach(product => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="product-card">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            ${product.image ? `<img src="${product.image}" alt="${product.name}" class="product-image" onclick="toggleImageSize(this)" />` : ''}
+                        </div>
+                    `;
+                    productList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Fetch products when the page loads
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+
+        // Toggle image size between small and large when clicked
+        function toggleImageSize(image) {
+            image.classList.toggle('large');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+/* Reset some default styles */
+body, h1, h2, ul, li, form {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Container for the dashboard layout */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Navbar styling */
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Dashboard content styling */
+.dashboard-content {
+    display: flex;
+    flex: 1;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 30%;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    height: calc(100vh - 50px); /* Subtract the height of the navbar */
+    overflow-y: auto;
+}
+
+.sidebar h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background-color: #34495e;
+}
+
+/* Main content styling */
+.main {
+    width: 70%;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.main h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.section {
+    display: none;
+}
+
+/* Active section styling */
+.section.active {
+    display: block;
+}
+
+form {
+    margin-top: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #2ecc71;
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}

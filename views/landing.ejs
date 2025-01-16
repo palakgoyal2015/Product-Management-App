@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4a90e2, #42e695);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        /* Container for content */
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        /* Title and tagline styling */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Button styling */
+        .btn {
+            display: block;
+            text-decoration: none;
+            color: #fff;
+            background: #4a90e2;
+            padding: 0.75rem 1rem;
+            margin: 0.5rem auto;
+            border-radius: 6px;
+            width: 80%;
+            text-align: center;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-3px);
+        }
+
+        /* Animation for fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Product Management</h1>
+        <p>Your ultimate solution to organize and manage products effectively.</p>        
+        <a href="/login" class="btn">Login</a>
+        <a href="/signup" class="btn">Sign Up</a>
+    </div>
+</body>
+</html>
